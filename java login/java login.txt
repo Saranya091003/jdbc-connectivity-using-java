@@ -1,0 +1,82 @@
+package myproject2;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class GUI1 extends JFrame implements ActionListener{
+	JLabel l1,l2,l3;
+	JTextField t1,t2,t3;
+	JButton b1,b2;
+	GUI1()
+	{
+		setLayout(null);
+		l1=new JLabel("Enter Roll Number:");
+		l2=new JLabel("Enter Students Name:");
+		l3=new JLabel("Enter Students Marks:");
+		t1=new JTextField();
+		t2=new JTextField();
+		t3=new JTextField();
+		b1=new JButton("ClickMe");
+		b2=new JButton("Clear");
+		l1.setBounds(100,100,150,30);
+		l2.setBounds(100,150,150,30);
+		l3.setBounds(100,200,150,30);
+		l3.setBounds(100,200,150,30);
+		t1.setBounds(250,100,150,30);
+		t2.setBounds(250,150,150,30);
+		t3.setBounds(250,200,150,30);
+		b1.setBounds(250,250,100,30);
+		b2.setBounds(350,250,100,30);
+		add(l1);add(l2);add(l3);
+		add(t1);add(t2);add(t3);
+		add(b1);add(b2);
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		JFrame f1=new GUI1();
+		f1.setSize(500,400);
+		f1.setVisible(true);
+    }
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==b1)
+		{
+		int rno=Integer.parseInt(t1.getText());
+		String sname=t2.getText();
+		float mark=Float.parseFloat(t3.getText());
+		JOptionPane.showMessageDialog(null,"rno,name,mark"+rno+" "+sname+" "+mark);
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driven");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost/vsb?user=root&password=12345");
+			Statement st=con.createStatement();
+			
+			int ans=st.executeUpdate("insert into sdetails values("+rno+",'"+sname+"',"+mark+")");
+			if(ans>0)
+				JOptionPane.showMessageDialog(null,"successfully inserted");
+			else
+				JOptionPane.showMessageDialog(null, "inserted error");
+			    st.close();
+			    con.close();
+		}
+		catch (Exception e1)
+		{
+			JOptionPane.showMessageDialog(null,"inserted error:"+e1.tostring());
+		}
+		t1.setText(" ");
+		t2.setText(" ");
+		t3.setText(" ");
+		t1.requestFocus();
+		}
+		else
+		{
+			t1.setText(" ");
+			t2.setText(" ");
+			t3.setText(" ");
+			t1.requestFocus();
+		}
+	}
+
+}
